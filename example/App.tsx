@@ -109,8 +109,8 @@ export default function App() {
         fps={fps}
         video
         isActive={true}
-        orientation="portrait"
         format={format}
+        pixelFormat="rgb"
         onLayout={(event: LayoutChangeEvent) => {
           setDimensions({
             height: event.nativeEvent.layout.height,
