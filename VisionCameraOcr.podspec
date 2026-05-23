@@ -10,12 +10,25 @@ Pod::Spec.new do |s|
   s.license      = package["license"]
   s.authors      = package["author"]
 
-  s.platforms    = { :ios => "15.5" }
+  s.platforms    = { :ios => min_ios_version_supported, :visionos => 1.0 }
   s.source       = { :git => "https://github.com/francesco-clementi-92/vision-camera-ocr", :tag => "#{s.version}" }
 
-  s.source_files = "ios/**/*.{h,m,mm,swift}"
+  s.source_files = [
+    # Implementation (Swift)
+    "ios/**/*.{swift}",
+    # Autolinking/Registration (Objective-C++)
+    "ios/**/*.{m,mm}",
+    # Implementation (C++ objects)
+    "cpp/**/*.{hpp,cpp}",
+  ]
+  s.frameworks = ["AVFoundation"]
 
-  s.dependency "VisionCamera"
-  s.dependency "React-Core"
-  s.dependency "GoogleMLKit/TextRecognition", "8.0.0"
+  load 'nitrogen/generated/ios/VisionCameraTextRecognition+autolinking.rb'
+  add_nitrogen_files(s)
+
+  s.dependency 'GoogleMLKit/TextRecognition', '8.0.0'
+  s.dependency 'VisionCamera'
+  s.dependency 'React-jsi'
+  s.dependency 'React-callinvoker'
+  install_modules_dependencies(s)
 end

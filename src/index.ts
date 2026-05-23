@@ -1,90 +1,10 @@
-/* eslint-disable no-undef */
-import { VisionCameraProxy, Frame } from 'react-native-vision-camera';
-
-type BoundingFrame = {
-  x: number;
-  y: number;
-  width: number;
-  height: number;
-  boundingCenterX: number;
-  boundingCenterY: number;
-};
-
-type BoundingBox = {
-  top: number;
-  right: number;
-  bottom: number;
-  left: number;
-};
-
-type Point = { x: number; y: number };
-
-type Symbol = {
-  text: string;
-  cornerPoints?: Point[];
-  frame?: BoundingFrame;
-  boundingBox?: BoundingBox;
-};
-
-type TextElement = {
-  text: string;
-  frame?: BoundingFrame;
-  boundingBox?: BoundingBox;
-  cornerPoints?: Point[];
-  symbols?: Symbol[];
-};
-
-type TextLine = {
-  text: string;
-  elements: TextElement[];
-  frame?: BoundingFrame;
-  boundingBox?: BoundingBox;
-  recognizedLanguages: string[];
-  cornerPoints?: Point[];
-  confidence: number;
-};
-
-type TextBlock = {
-  text: string;
-  lines: TextLine[];
-  frame?: BoundingFrame;
-  boundingBox?: BoundingBox;
-  recognizedLanguages: string[];
-  cornerPoints?: Point[];
-};
-
-type Text = {
-  text: string;
-  blocks: TextBlock[];
-};
-
-export interface CropRegion{
-  left: number;
-  top: number;
-  width: number;
-  height: number;
-}
-
-export type OCRFrame = {
-  result: Text;
-};
-
-/**
- * Scans OCR.
- */
-const plugin = VisionCameraProxy.initFrameProcessorPlugin('scanOCR');
-
-export function scanOCR(frame: Frame, params?: any): OCRFrame {
-  'worklet';
-  if (plugin == null) {
-    throw new Error(
-      'Failed to load Frame Processor Plugin "scanOCR"! Please check your dependencies and make sure that the plugin is linked correctly.'
-    );
-  }
-  if (params) {
-    return plugin.call(frame, params) as any;
-  } else {
-    return plugin.call(frame) as any;
-  }
-}
-
+export * from './factory'
+export * from './specs/Point'
+export * from './specs/RecognizedText'
+export * from './specs/Rect'
+export * from './specs/TextRecognitionOutputResolution'
+export * from './specs/TextRecognizer.nitro'
+export * from './specs/TextRecognizerFactory.nitro'
+export * from './useTextRecognitionOutput'
+export * from './useTextRecognizer'
+export * from './views/TextRecognitionCamera'
