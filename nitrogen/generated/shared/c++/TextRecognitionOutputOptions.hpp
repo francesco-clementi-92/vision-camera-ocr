@@ -33,9 +33,9 @@ namespace margelo::nitro::camera::textrecognition { enum class TextRecognitionOu
 // Forward declaration of `RecognizedText` to properly resolve imports.
 namespace margelo::nitro::camera::textrecognition { struct RecognizedText; }
 
-#include "TextRecognitionOutputResolution.hpp"
+#include <VisionCameraOcr/TextRecognitionOutputResolution.hpp>
 #include <optional>
-#include "RecognizedText.hpp"
+#include <VisionCameraOcr/RecognizedText.hpp>
 #include <functional>
 #include <exception>
 

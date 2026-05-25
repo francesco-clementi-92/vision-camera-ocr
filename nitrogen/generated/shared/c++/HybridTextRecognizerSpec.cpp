@@ -5,7 +5,7 @@
 /// Copyright © Marc Rousavy @ Margelo
 ///
 
-#include "HybridTextRecognizerSpec.hpp"
+#include <VisionCameraOcr/HybridTextRecognizerSpec.hpp>
 
 namespace margelo::nitro::camera::textrecognition {
 

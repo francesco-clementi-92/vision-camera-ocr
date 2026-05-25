@@ -34,16 +34,16 @@ namespace margelo::nitro::camera::textrecognition { struct TextRecognitionOutput
 namespace margelo::nitro::camera::textrecognition { enum class TextRecognitionOutputResolution; }
 
 // Include C++ defined types
-#include "HybridTextRecognizerFactorySpec.hpp"
-#include "HybridTextRecognizerSpec.hpp"
-#include "Point.hpp"
-#include "RecognizedText.hpp"
-#include "Rect.hpp"
-#include "TextBlock.hpp"
-#include "TextElement.hpp"
-#include "TextLine.hpp"
-#include "TextRecognitionOutputOptions.hpp"
-#include "TextRecognitionOutputResolution.hpp"
+#include <VisionCameraOcr/HybridTextRecognizerFactorySpec.hpp>
+#include <VisionCameraOcr/HybridTextRecognizerSpec.hpp>
+#include <VisionCameraOcr/Point.hpp>
+#include <VisionCameraOcr/RecognizedText.hpp>
+#include <VisionCameraOcr/Rect.hpp>
+#include <VisionCameraOcr/TextBlock.hpp>
+#include <VisionCameraOcr/TextElement.hpp>
+#include <VisionCameraOcr/TextLine.hpp>
+#include <VisionCameraOcr/TextRecognitionOutputOptions.hpp>
+#include <VisionCameraOcr/TextRecognitionOutputResolution.hpp>
 #include <NitroModules/Promise.hpp>
 #include <NitroModules/Result.hpp>
 #include <VisionCamera/HybridCameraOutputSpec.hpp>
