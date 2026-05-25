@@ -6,7 +6,7 @@
 const fs = require('fs')
 const path = require('path')
 
-const POD_MODULE = 'VisionCameraOcr'
+const POD_MODULE = 'VisionCameraTextRecognition'
 const ROOT = path.join(__dirname, '..', 'nitrogen', 'generated')
 
 const HEADERS = [

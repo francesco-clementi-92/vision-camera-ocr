@@ -32,7 +32,7 @@
 namespace margelo::nitro::camera::textrecognition { struct TextBlock; }
 
 #include <string>
-#include <VisionCameraOcr/TextBlock.hpp>
+#include <VisionCameraTextRecognition/TextBlock.hpp>
 #include <vector>
 
 namespace margelo::nitro::camera::textrecognition {

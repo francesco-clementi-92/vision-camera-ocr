@@ -6,7 +6,9 @@ module.exports = {
       /**
        * @type {import('@react-native-community/cli-types').IOSDependencyParams}
        */
-      ios: {},
+      ios: {
+        podspecPath: './VisionCameraTextRecognition.podspec',
+      },
       /**
        * @type {import('@react-native-community/cli-types').AndroidDependencyParams}
        */

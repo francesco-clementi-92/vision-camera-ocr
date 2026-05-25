@@ -16,7 +16,7 @@ end
 
 target 'visioncameraocrexample' do
   config = use_native_modules!
-  pod 'VisionCameraOcr', :path => '../..'
+  pod 'VisionCameraTextRecognition', :path => '../..'
 
   use_react_native!(
     :path => config[:reactNativePath],

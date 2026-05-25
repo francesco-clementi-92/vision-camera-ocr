@@ -21,9 +21,9 @@ namespace margelo::nitro::camera { class HybridCameraOutputSpec; }
 namespace margelo::nitro::camera::textrecognition { struct TextRecognitionOutputOptions; }
 
 #include <memory>
-#include <VisionCameraOcr/HybridTextRecognizerSpec.hpp>
+#include <VisionCameraTextRecognition/HybridTextRecognizerSpec.hpp>
 #include <VisionCamera/HybridCameraOutputSpec.hpp>
-#include <VisionCameraOcr/TextRecognitionOutputOptions.hpp>
+#include <VisionCameraTextRecognition/TextRecognitionOutputOptions.hpp>
 
 namespace margelo::nitro::camera::textrecognition {
 

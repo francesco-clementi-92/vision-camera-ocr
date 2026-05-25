@@ -18,7 +18,7 @@ namespace margelo::nitro::camera::textrecognition { struct RecognizedText; }
 // Forward declaration of `HybridFrameSpec` to properly resolve imports.
 namespace margelo::nitro::camera { class HybridFrameSpec; }
 
-#include <VisionCameraOcr/RecognizedText.hpp>
+#include <VisionCameraTextRecognition/RecognizedText.hpp>
 #include <memory>
 #include <VisionCamera/HybridFrameSpec.hpp>
 #include <NitroModules/Promise.hpp>
