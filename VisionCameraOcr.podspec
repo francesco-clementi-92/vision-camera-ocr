@@ -27,7 +27,8 @@ Pod::Spec.new do |s|
   add_nitrogen_files(s)
 
   # Disambiguate Nitrogen shared C++ headers (e.g. Rect.hpp) from other pods when using static frameworks.
-  s.pod_target_xcconfig = (s.pod_target_xcconfig || {}).merge({
+  current_pod_target_xcconfig = s.attributes_hash['pod_target_xcconfig'] || {}
+  s.pod_target_xcconfig = current_pod_target_xcconfig.merge({
     'HEADER_SEARCH_PATHS' => '$(inherited) "${PODS_TARGET_SRCROOT}/nitrogen/generated/shared/c++" "${PODS_TARGET_SRCROOT}/nitrogen/generated/ios/c++"',
   })
 
