@@ -36,10 +36,10 @@ namespace margelo::nitro::camera::textrecognition { struct Point; }
 namespace margelo::nitro::camera::textrecognition { struct TextLine; }
 
 #include <string>
-#include <VisionCameraTextRecognition/Rect.hpp>
-#include <VisionCameraTextRecognition/Point.hpp>
+#include "Rect.hpp"
+#include "Point.hpp"
 #include <vector>
-#include <VisionCameraTextRecognition/TextLine.hpp>
+#include "TextLine.hpp"
 
 namespace margelo::nitro::camera::textrecognition {
 

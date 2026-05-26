@@ -7,7 +7,7 @@
 
 #pragma once
 
-#include <VisionCameraTextRecognition/HybridTextRecognizerSpec.hpp>
+#include "HybridTextRecognizerSpec.hpp"
 
 // Forward declaration of `HybridTextRecognizerSpec_cxx` to properly resolve imports.
 namespace VisionCameraTextRecognition { class HybridTextRecognizerSpec_cxx; }
@@ -27,14 +27,14 @@ namespace margelo::nitro::camera::textrecognition { struct TextElement; }
 // Forward declaration of `HybridFrameSpec` to properly resolve imports.
 namespace margelo::nitro::camera { class HybridFrameSpec; }
 
-#include <VisionCameraTextRecognition/RecognizedText.hpp>
+#include "RecognizedText.hpp"
 #include <string>
-#include <VisionCameraTextRecognition/TextBlock.hpp>
+#include "TextBlock.hpp"
 #include <vector>
-#include <VisionCameraTextRecognition/Rect.hpp>
-#include <VisionCameraTextRecognition/Point.hpp>
-#include <VisionCameraTextRecognition/TextLine.hpp>
-#include <VisionCameraTextRecognition/TextElement.hpp>
+#include "Rect.hpp"
+#include "Point.hpp"
+#include "TextLine.hpp"
+#include "TextElement.hpp"
 #include <memory>
 #include <VisionCamera/HybridFrameSpec.hpp>
 #include <NitroModules/Promise.hpp>

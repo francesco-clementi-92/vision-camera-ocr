@@ -42,15 +42,15 @@ namespace VisionCameraTextRecognition { class HybridTextRecognizerFactorySpec_cx
 namespace VisionCameraTextRecognition { class HybridTextRecognizerSpec_cxx; }
 
 // Include C++ defined types
-#include <VisionCameraTextRecognition/HybridTextRecognizerFactorySpec.hpp>
-#include <VisionCameraTextRecognition/HybridTextRecognizerSpec.hpp>
-#include <VisionCameraTextRecognition/Point.hpp>
-#include <VisionCameraTextRecognition/RecognizedText.hpp>
-#include <VisionCameraTextRecognition/Rect.hpp>
-#include <VisionCameraTextRecognition/TextBlock.hpp>
-#include <VisionCameraTextRecognition/TextElement.hpp>
-#include <VisionCameraTextRecognition/TextLine.hpp>
-#include <VisionCameraTextRecognition/TextRecognitionOutputResolution.hpp>
+#include "HybridTextRecognizerFactorySpec.hpp"
+#include "HybridTextRecognizerSpec.hpp"
+#include "Point.hpp"
+#include "RecognizedText.hpp"
+#include "Rect.hpp"
+#include "TextBlock.hpp"
+#include "TextElement.hpp"
+#include "TextLine.hpp"
+#include "TextRecognitionOutputResolution.hpp"
 #include <NitroModules/Promise.hpp>
 #include <NitroModules/PromiseHolder.hpp>
 #include <NitroModules/Result.hpp>
