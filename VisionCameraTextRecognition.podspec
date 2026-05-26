@@ -11,7 +11,7 @@ Pod::Spec.new do |s|
   s.license      = package["license"]
   s.authors      = package["author"]
 
-  s.platforms    = { :ios => min_ios_version_supported, :visionos => 1.0 }
+  s.platforms    = { :ios => 15.5, :visionos => 1.0 }
   s.source       = { :git => "https://github.com/francesco-clementi-92/vision-camera-ocr", :tag => "#{s.version}" }
 
   s.source_files = [
