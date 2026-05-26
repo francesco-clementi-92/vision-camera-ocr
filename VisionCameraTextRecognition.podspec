@@ -27,12 +27,6 @@ Pod::Spec.new do |s|
   load 'nitrogen/generated/ios/VisionCameraTextRecognition+autolinking.rb'
   add_nitrogen_files(s)
 
-  # Disambiguate Nitrogen shared C++ headers (e.g. Rect.hpp) from other pods when using static frameworks.
-  current_pod_target_xcconfig = s.attributes_hash['pod_target_xcconfig'] || {}
-  s.pod_target_xcconfig = current_pod_target_xcconfig.merge({
-    'HEADER_SEARCH_PATHS' => '$(inherited) "${PODS_TARGET_SRCROOT}/nitrogen/generated/shared/c++" "${PODS_TARGET_SRCROOT}/nitrogen/generated/ios/c++"',
-  })
-
   s.dependency 'GoogleMLKit/TextRecognition', '8.0.0'
   s.dependency 'VisionCamera'
   s.dependency 'React-jsi'
