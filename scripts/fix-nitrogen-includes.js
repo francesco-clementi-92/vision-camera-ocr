@@ -2,12 +2,17 @@
 /**
  * Re-apply framework-form includes after `npx nitrogen` regenerates files.
  * See: https://github.com/mrousavy/nitro/issues/1293
+ *
+ * iOS (CocoaPods static frameworks): framework includes resolve via the pod module.
+ * Android (CMake): needs physical VisionCameraTextRecognition/*.hpp aliases under shared/c++.
  */
 const fs = require('fs')
 const path = require('path')
 
 const POD_MODULE = 'VisionCameraTextRecognition'
 const ROOT = path.join(__dirname, '..', 'nitrogen', 'generated')
+const SHARED_CPP = path.join(ROOT, 'shared', 'c++')
+const MODULE_HEADER_DIR = path.join(SHARED_CPP, POD_MODULE)
 
 const HEADERS = [
   'HybridTextRecognizerFactorySpec.hpp',
@@ -59,14 +64,55 @@ function patchFile(filePath) {
   return changed
 }
 
+/**
+ * CMake on Android resolves <Module/Header.hpp> from include dirs literally.
+ * Create shared/c++/VisionCameraTextRecognition/*.hpp -> ../Header.hpp symlinks.
+ */
+function ensureAndroidFrameworkHeaderAliases() {
+  if (!fs.existsSync(SHARED_CPP)) return 0
+
+  fs.mkdirSync(MODULE_HEADER_DIR, { recursive: true })
+  let count = 0
+
+  for (const header of HEADERS) {
+    const source = path.join(SHARED_CPP, header)
+    if (!fs.existsSync(source)) continue
+
+    const alias = path.join(MODULE_HEADER_DIR, header)
+    const relativeTarget = path.join('..', header)
+
+    if (fs.existsSync(alias)) {
+      try {
+        const stat = fs.lstatSync(alias)
+        if (stat.isSymbolicLink()) {
+          const current = fs.readlinkSync(alias)
+          if (current === relativeTarget || current === header) continue
+        }
+      } catch {
+        // stale alias — recreate below
+      }
+      fs.rmSync(alias, { force: true })
+    }
+
+    fs.symlinkSync(relativeTarget, alias)
+    count++
+  }
+
+  return count
+}
+
 const dirs = [
   path.join(ROOT, 'ios'),
   path.join(ROOT, 'shared', 'c++'),
 ]
-let count = 0
+let patchCount = 0
 for (const dir of dirs) {
   for (const file of walk(dir)) {
-    if (patchFile(file)) count++
+    if (patchFile(file)) patchCount++
   }
 }
-console.log(`[fix-nitrogen-includes] Updated ${count} file(s).`)
+
+const aliasCount = ensureAndroidFrameworkHeaderAliases()
+console.log(
+  `[fix-nitrogen-includes] Updated ${patchCount} file(s), ${aliasCount} Android header alias(es).`,
+)
