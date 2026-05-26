@@ -8,8 +8,8 @@
 #include "VisionCameraTextRecognition-Swift-Cxx-Bridge.hpp"
 
 // Include C++ implementation defined types
-#include "HybridTextRecognizerFactorySpecSwift.hpp"
-#include "HybridTextRecognizerSpecSwift.hpp"
+#include "c++/HybridTextRecognizerFactorySpecSwift.hpp"
+#include "c++/HybridTextRecognizerSpecSwift.hpp"
 #include "VisionCameraTextRecognition-Swift-Cxx-Umbrella.hpp"
 #include <NitroModules/NitroDefines.hpp>
 #include <VisionCamera/VisionCamera-Swift-Cxx-Bridge.hpp>

@@ -7,7 +7,7 @@
 
 #pragma once
 
-#include "HybridTextRecognizerFactorySpec.hpp"
+#include "../../shared/c++/HybridTextRecognizerFactorySpec.hpp"
 
 // Forward declaration of `HybridTextRecognizerFactorySpec_cxx` to properly resolve imports.
 namespace VisionCameraTextRecognition { class HybridTextRecognizerFactorySpec_cxx; }
@@ -34,23 +34,23 @@ namespace margelo::nitro::camera::textrecognition { struct TextLine; }
 namespace margelo::nitro::camera::textrecognition { struct TextElement; }
 
 #include <memory>
-#include "HybridTextRecognizerSpec.hpp"
+#include "../../shared/c++/HybridTextRecognizerSpec.hpp"
 #include <VisionCamera/HybridCameraOutputSpec.hpp>
-#include "TextRecognitionOutputOptions.hpp"
-#include "TextRecognitionOutputResolution.hpp"
+#include "../../shared/c++/TextRecognitionOutputOptions.hpp"
+#include "../../shared/c++/TextRecognitionOutputResolution.hpp"
 #include <optional>
-#include "RecognizedText.hpp"
+#include "../../shared/c++/RecognizedText.hpp"
 #include <functional>
 #include <string>
-#include "TextBlock.hpp"
+#include "../../shared/c++/TextBlock.hpp"
 #include <vector>
-#include "Rect.hpp"
-#include "Point.hpp"
-#include "TextLine.hpp"
-#include "TextElement.hpp"
+#include "../../shared/c++/Rect.hpp"
+#include "../../shared/c++/Point.hpp"
+#include "../../shared/c++/TextLine.hpp"
+#include "../../shared/c++/TextElement.hpp"
 #include <exception>
 
-#include "VisionCameraTextRecognition-Swift-Cxx-Umbrella.hpp"
+#include "../VisionCameraTextRecognition-Swift-Cxx-Umbrella.hpp"
 
 namespace margelo::nitro::camera::textrecognition {
 

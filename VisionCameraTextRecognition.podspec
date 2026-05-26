@@ -32,4 +32,14 @@ Pod::Spec.new do |s|
   s.dependency 'React-jsi'
   s.dependency 'React-callinvoker'
   install_modules_dependencies(s)
+
+  current_pod_target_xcconfig = s.attributes_hash['pod_target_xcconfig'] || {}
+  current_header_search_paths = Array(current_pod_target_xcconfig['HEADER_SEARCH_PATHS'])
+  s.pod_target_xcconfig = current_pod_target_xcconfig.merge({
+    'HEADER_SEARCH_PATHS' => current_header_search_paths + [
+      '"${PODS_TARGET_SRCROOT}/nitrogen/generated/shared/c++"',
+      '"${PODS_TARGET_SRCROOT}/nitrogen/generated/ios"',
+      '"${PODS_TARGET_SRCROOT}/nitrogen/generated/ios/c++"',
+    ],
+  })
 end

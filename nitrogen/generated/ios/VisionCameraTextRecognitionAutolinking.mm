@@ -10,7 +10,7 @@
 #import "VisionCameraTextRecognition-Swift-Cxx-Umbrella.hpp"
 #import <type_traits>
 
-#include "HybridTextRecognizerFactorySpecSwift.hpp"
+#include "c++/HybridTextRecognizerFactorySpecSwift.hpp"
 
 @interface VisionCameraTextRecognitionAutolinking : NSObject
 @end

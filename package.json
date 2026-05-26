@@ -22,6 +22,7 @@
     "ios/**/*.mm",
     "ios/**/*.cpp",
     "ios/**/*.swift",
+    "scripts/patch-ios-nitrogen-includes.js",
     "nitro.json",
     "*.podspec",
     "README.md"
@@ -31,7 +32,8 @@
     "typescript": "tsc --noEmit",
     "clean": "rm -rf android/build node_modules/**/android/build lib",
     "lint": "eslint \"**/*.{js,ts,tsx}\"",
-    "prepare": "bob build && npx nitrogen",
+    "prepare": "bob build && npx nitrogen && node scripts/patch-ios-nitrogen-includes.js",
+    "patch-ios-nitrogen-includes": "node scripts/patch-ios-nitrogen-includes.js",
     "release": "release-it",
     "example": "yarn --cwd example",
     "pods": "cd example && pod-install --quiet",
