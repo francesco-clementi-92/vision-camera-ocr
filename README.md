@@ -1,107 +1,153 @@
 
 # vision-camera-ocr-plugin
 
-A [VisionCamera](https://github.com/mrousavy/react-native-vision-camera) Frame Processor Plugin to preform text detection on images using [**MLKit Vision** Text Recognition](https://developers.google.com/ml-kit/vision/text-recognition). This module can be used only with React Native Vision Camera >= v4.x.x
+On-device text recognition for [VisionCamera](https://github.com/mrousavy/react-native-vision-camera), powered by [**MLKit Vision** Text Recognition](https://developers.google.com/ml-kit/vision/text-recognition).
+
+Built on [Nitro Modules](https://nitro.margelo.com/). Requires **VisionCamera >= 5.1.0**.
+
+> **Language support:** Latin script only. Chinese, Japanese, Korean and Devanagari models are not bundled.
 
 <img style='width:200px;' src="docs/demo.gif">
 
 ## Installation
 
 ```sh
-yarn add vision-camera-ocr-plugin
+yarn add vision-camera-ocr-plugin react-native-nitro-modules
 cd ios && pod install
 ```
 
-Add the plugin to your `babel.config.js`:
+Peer dependencies (must already be installed in your app):
+
+- `react-native-vision-camera` >= 5.1.0
+- `react-native-nitro-modules` >= 0.36.0
+
+The [frame-processor](#3-frame-processor-usetextrecognizer) usage additionally needs
+[`react-native-worklets-core`](https://github.com/margelo/react-native-worklets-core).
+Add its plugin to `babel.config.js` (not needed for the other two usages):
 
 ```js
 module.exports = {
-   plugins: [['react-native-worklets-core/plugin']],
-    // ...
+  plugins: [['react-native-worklets-core/plugin']],
+  // ...
+}
 ```
 
-> Note: You have to restart metro-bundler for changes in the `babel.config.js` file to take effect.
+> Restart metro-bundler after editing `babel.config.js`.
 
 ## Usage
 
-```js
-import {OCRFrame, scanOCR} from 'vision-camera-ocr-plugin';
-import {
-  useFrameProcessor,
-  Camera,
-  useCameraDevice,
-} from 'react-native-vision-camera';
-import {Worklets} from 'react-native-worklets-core';
+There are three ways to use this library, from simplest to most flexible.
 
-export default ({onTextClicked}: VisionCameraPlateProps) => {
-  const [hasPermission, setHasPermission] = React.useState(false);
-  const [ocr, setOcr] = React.useState<OCRFrame>();
-  const isFocused = useIsFocused();
-  const device = useCameraDevice('back');
+### 1. `TextRecognitionCamera` (drop-in component)
 
-  const onCodeDetected = Worklets.createRunInJsFn((data: any) => {
-    setOcr(data);
-  });
+Renders a `<Camera />` on the rear device and streams recognized text.
 
-  const frameProcessor = useFrameProcessor(frame => {
-    'worklet';
-    const data = scanOCR(frame);
-    onCodeDetected(data);
-  }, []);
+```tsx
+import { TextRecognitionCamera } from 'vision-camera-ocr-plugin'
 
-  React.useEffect(() => {
-    (async () => {
-      const status = await Camera.requestCameraPermission();
-      setHasPermission(status === 'granted');
-    })();
-  }, []);
-
-
+function App() {
   return (
-    <>
-      {device !== undefined && hasPermission ? (
-        <Camera
-          frameProcessor={frameProcessor}
-          device={device}
-          isActive={isFocused}
-          pixelFormat="yuv"
-        />
-      ) : (
-        <View>
-          <Text>No available cameras</Text>
-        </View>
-      )}
-    </>
-  );
-};
-
+    <TextRecognitionCamera
+      style={{ flex: 1 }}
+      isActive={true}
+      onTextRecognized={(result) => console.log(result.text)}
+      onError={(error) => console.error(error)}
+    />
+  )
+}
 ```
+
+### 2. `useTextRecognitionOutput` (Camera Output)
+
+Attach a text-recognition output to your own `<Camera />` or `CameraSession`.
+
+```tsx
+import { useTextRecognitionOutput } from 'vision-camera-ocr-plugin'
+import { Camera, useCameraDevice } from 'react-native-vision-camera'
+
+function App() {
+  const device = useCameraDevice('back')
+  const textOutput = useTextRecognitionOutput({
+    outputResolution: 'preview', // or 'full'
+    onTextRecognized: (result) => console.log(result.text),
+    onError: (error) => console.error(error),
+  })
+
+  if (device == null) return null
+  return <Camera style={{ flex: 1 }} isActive device={device} outputs={[textOutput]} />
+}
+```
+
+### 3. Frame Processor (`useTextRecognizer`)
+
+Run recognition manually inside a Frame Output worklet. This is the only path that
+gives you the built-in coordinate-conversion helpers (see [Coordinates](#coordinates)).
+
+```tsx
+import { useTextRecognizer } from 'vision-camera-ocr-plugin'
+import { useFrameOutput } from 'react-native-vision-camera'
+
+const recognizer = useTextRecognizer()
+const frameOutput = useFrameOutput({
+  onFrame: (frame) => {
+    'worklet'
+    const result = recognizer.recognizeText(frame) // or recognizeTextAsync(frame)
+    console.log(result.text)
+    frame.dispose() // required: frames are pooled GPU buffers
+  },
+})
+```
+
+## Options
+
+`TextRecognitionOutputOptions` (used by #1 and #2):
+
+| Option             | Type                       | Default     | Description                                                        |
+| ------------------ | -------------------------- | ----------- | ------------------------------------------------------------------ |
+| `outputResolution` | `'preview'` \| `'full'`    | `'preview'` | `'preview'` = lower latency; `'full'` = highest detail (accuracy). |
+| `onTextRecognized` | `(result) => void`         | —           | Called for every recognized frame.                                 |
+| `onError`          | `(error) => void`          | —           | Called on recognition errors (throttled to ~1/s).                  |
 
 ## Data
 
-`scanOCR(frame)` returns an `OCRFrame` with the following data shape. See the example for how to use this in your app.
+`RecognizedText` mirrors the MLKit
+[text structure](https://developers.google.com/ml-kit/vision/text-recognition#text_structure)
+— `text` split into `blocks` → `lines` → `elements`:
 
- ``` jsx
-  OCRFrame = {
-    result: {
-      text: string, // Raw result text
-      blocks: Block[], // Each recognized element broken into blocks
-    ;
-};
+```ts
+interface RecognizedText {
+  text: string
+  blocks: TextBlock[]
+}
+
+interface TextBlock {         // also TextLine, TextElement
+  text: string
+  boundingBox: Rect           // { left, right, top, bottom }
+  cornerPoints: Point[]       // { x, y }
+  recognizedLanguages: string[] // BCP-47 codes
+  lines: TextLine[]           // TextLine has `elements`, TextElement is a leaf
+}
 ```
 
-The text object closely resembles the object documented in the MLKit documents.
-<https://developers.google.com/ml-kit/vision/text-recognition#text_structure>
+## Coordinates
 
-```
-The Text Recognizer segments text into blocks, lines, and elements. Roughly speaking:
+`boundingBox` / `cornerPoints` are in the recognized image's coordinate system, **not**
+your preview view's.
 
-a Block is a contiguous set of text lines, such as a paragraph or column,
+- **Frame Processor (#3):** convert precisely with the VisionCamera helpers —
+  `frame.convertFramePointToCameraPoint(point)` then
+  `previewView.convertCameraPointToViewPoint(cameraPoint)`.
+- **Component / Output (#1, #2):** these helpers are not available. Coordinates are in
+  the oriented (upright) image space, while `output.currentResolution` reports the
+  **sensor-native, un-rotated** size — so in portrait the width/height axes are swapped
+  relative to the coordinates. For pixel-accurate overlays use the Frame Processor path;
+  use the component/output when you only need `result.text`.
 
-a Line is a contiguous set of words on the same axis, and
+## Pixel format
 
-an Element is a contiguous set of alphanumeric characters ("word") on the same axis in most Latin languages, or a character in others
-```
+MLKit needs a standard camera buffer. In the Frame Processor path use
+`pixelFormat="yuv"` (or `"rgb"`); a `"native"` format may deliver RAW/vendor buffers
+that cannot be converted, which surfaces as an `onError` / thrown error.
 
 ## Contributing
 

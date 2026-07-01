@@ -28,7 +28,8 @@ Pod::Spec.new do |s|
   add_nitrogen_files(s)
 
   s.dependency 'GoogleMLKit/TextRecognition', '9.0.0'
-  s.dependency 'VisionCamera'
+  # Requires the OutputConfiguration / ResolutionRule.min APIs (VisionCamera >= 5.1.0).
+  s.dependency 'VisionCamera', '>= 5.1.0'
   s.dependency 'React-jsi'
   s.dependency 'React-callinvoker'
   install_modules_dependencies(s)

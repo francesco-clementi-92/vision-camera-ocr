@@ -72,8 +72,8 @@
   "peerDependencies": {
     "react": "*",
     "react-native": "*",
-    "react-native-nitro-modules": "*",
-    "react-native-vision-camera": "*"
+    "react-native-nitro-modules": ">=0.36.0",
+    "react-native-vision-camera": ">=5.1.0"
   },
   "jest": {
     "preset": "react-native",
