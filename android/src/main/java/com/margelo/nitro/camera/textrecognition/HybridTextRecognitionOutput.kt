@@ -20,6 +20,7 @@ import com.margelo.nitro.camera.extensions.surfaceRotation
 import com.margelo.nitro.camera.public.NativeCameraOutput
 import java.util.concurrent.Executors
 import java.util.concurrent.atomic.AtomicBoolean
+import java.util.concurrent.atomic.AtomicLong
 
 class HybridTextRecognitionOutput(
   private val options: TextRecognitionOutputOptions,
@@ -40,6 +41,7 @@ class HybridTextRecognitionOutput(
   private val executor = Executors.newSingleThreadExecutor()
   private val recognizer = TextRecognition.getClient(TextRecognizerOptions.DEFAULT_OPTIONS)
   private var isBusy = AtomicBoolean(false)
+  private val lastErrorTimestamp = AtomicLong(0)
   private val recommendedResolutionForTextRecognition = Size(1280, 720)
 
   override fun createUseCase(
@@ -75,7 +77,17 @@ class HybridTextRecognitionOutput(
   override fun dispose() {
     super.dispose()
     recognizer.close()
-    executor.close()
+    executor.shutdown()
+  }
+
+  // Forward errors at most once per second so a broken frame stream can't spam
+  // the JS callback.
+  private fun reportError(error: Throwable) {
+    val now = System.currentTimeMillis()
+    val last = lastErrorTimestamp.get()
+    if (now - last >= 1000L && lastErrorTimestamp.compareAndSet(last, now)) {
+      options.onError(error)
+    }
   }
 
   @OptIn(ExperimentalGetImage::class)
@@ -92,7 +104,7 @@ class HybridTextRecognitionOutput(
         // media image is null - error & return.
         imageProxy.close()
         isBusy.set(false)
-        options.onError(Error("`ImageProxy` does not have an `Image`!"))
+        reportError(Error("`ImageProxy` does not have an `Image`!"))
         return
       }
       // TODO: Support MirrorMode?
@@ -102,7 +114,7 @@ class HybridTextRecognitionOutput(
         .addOnSuccessListener { text ->
           options.onTextRecognized(text.toRecognizedText())
         }.addOnFailureListener { error ->
-          options.onError(error)
+          reportError(error)
         }.addOnCompleteListener {
           imageProxy.close()
           isBusy.set(false)
@@ -110,7 +122,7 @@ class HybridTextRecognitionOutput(
     } catch (error: Throwable) {
       imageProxy.close()
       isBusy.set(false)
-      options.onError(error)
+      reportError(error)
     }
   }
 }

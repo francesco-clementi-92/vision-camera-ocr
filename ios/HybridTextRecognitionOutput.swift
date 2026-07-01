@@ -52,7 +52,7 @@ final class HybridTextRecognitionOutput: HybridCameraOutputSpec, NativeCameraOut
     self.recognizer = TextRecognizer.textRecognizer(options: TextRecognizerOptions())
     self.onTextRecognized = options.onTextRecognized
     self.onError = options.onError
-    self.outputResolution = options.outputResolution
+    self.outputResolution = options.outputResolution ?? .preview
     self.queue = DispatchQueue(label: "com.margelo.camera.textrecognition")
     self.output = AVCaptureVideoDataOutput()
     super.init()
@@ -131,7 +131,10 @@ final class HybridTextRecognitionOutput: HybridCameraOutputSpec, NativeCameraOut
     // Force mirroring off (cheap flag, no rotation) so ML Kit receives a
     // non-mirrored, readable image. Without this the front camera auto-mirrors
     // (`automaticallyAdjustsVideoMirroring`), which flips text and breaks OCR.
-    try? connection.setMirrorMode(.off)
+    if connection.isVideoMirroringSupported {
+      connection.automaticallyAdjustsVideoMirroring = false
+      connection.isVideoMirrored = false
+    }
   }
 
   // Maps the target output orientation to the `UIImage.Orientation` of the raw,
