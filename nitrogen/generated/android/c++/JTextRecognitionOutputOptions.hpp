@@ -38,7 +38,7 @@ namespace margelo::nitro::camera::textrecognition {
   using namespace facebook;
 
   /**
-   * The C++ JNI bridge between the C++ struct "TextRecognitionOutputOptions" and the the Kotlin data class "TextRecognitionOutputOptions".
+   * The C++ JNI bridge between the C++ struct "TextRecognitionOutputOptions" and the Kotlin data class "TextRecognitionOutputOptions".
    */
   struct JTextRecognitionOutputOptions final: public jni::JavaClass<JTextRecognitionOutputOptions> {
   public:

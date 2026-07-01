@@ -22,7 +22,7 @@ namespace margelo::nitro::camera::textrecognition {
   using namespace facebook;
 
   /**
-   * The C++ JNI bridge between the C++ struct "TextElement" and the the Kotlin data class "TextElement".
+   * The C++ JNI bridge between the C++ struct "TextElement" and the Kotlin data class "TextElement".
    */
   struct JTextElement final: public jni::JavaClass<JTextElement> {
   public:

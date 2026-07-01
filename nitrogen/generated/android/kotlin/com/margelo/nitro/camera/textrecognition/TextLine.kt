@@ -47,7 +47,7 @@ data class TextLine(
   }
 
   override fun hashCode(): Int {
-    return arrayOf(
+    return arrayOf<Any?>(
       text,
       boundingBox,
       cornerPoints,
