@@ -27,7 +27,7 @@ Pod::Spec.new do |s|
   load 'nitrogen/generated/ios/VisionCameraTextRecognition+autolinking.rb'
   add_nitrogen_files(s)
 
-  s.dependency 'GoogleMLKit/TextRecognition', '8.0.0'
+  s.dependency 'GoogleMLKit/TextRecognition', '9.0.0'
   s.dependency 'VisionCamera'
   s.dependency 'React-jsi'
   s.dependency 'React-callinvoker'
