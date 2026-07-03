@@ -63,6 +63,14 @@ final class HybridTextRecognitionOutput: HybridCameraOutputSpec, NativeCameraOut
     })
     self.output.setSampleBufferDelegate(delegate, queue: queue)
     self.output.alwaysDiscardsLateVideoFrames = true
+    // Force an ML Kit-compatible 8-bit BGRA pixel format. Without this the
+    // output inherits the source's native format - on modern devices with
+    // HDR-capable video formats (e.g. iPhone 16) that is 10-bit biplanar
+    // ('x420'), which ML Kit cannot process, so OCR silently never recognizes
+    // anything. The BGRA conversion is done in hardware and is cheap.
+    self.output.videoSettings = [
+      kCVPixelBufferPixelFormatTypeKey as String: kCVPixelFormatType_32BGRA
+    ]
     if #available(iOS 17.0, *), options.outputResolution != .full {
       self.output.automaticallyConfiguresOutputBufferDimensions = false
       self.output.deliversPreviewSizedOutputBuffers = true
