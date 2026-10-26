@@ -98,6 +98,8 @@ const frameOutput = useFrameOutput({
 })
 ```
 
+> **Known issue (Android):** with Nitro 0.37 and earlier, calling `recognizeText`/`recognizeTextAsync` from a frame processor can crash at startup in `JSIConverter<RecognizedText>::toJSI`. That is a data race in Nitro's per-runtime caches between the JS thread and the worklet thread ([margelo/nitro#1705](https://github.com/margelo/nitro/issues/1705)), fixed in Nitro V1. Until then, prefer `useTextRecognitionOutput`, which converts results on the JS thread only. If you need the frame processor, create its `useFrameOutput` once, with stable options, so worklet runtimes aren't created and torn down while the app runs.
+
 ## Options
 
 `TextRecognitionOutputOptions` (used by #1 and #2):
