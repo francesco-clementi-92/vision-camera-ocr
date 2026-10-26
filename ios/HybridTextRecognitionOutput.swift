@@ -97,7 +97,24 @@ final class HybridTextRecognitionOutput: HybridCameraOutputSpec, NativeCameraOut
     // readable sensor image regardless of camera position.
     image.orientation = imageOrientation()
 
+    let ticket: MLKitClockGuard.Ticket
+    switch MLKitClockGuard.shared.admit(waiting: false) {
+    case .admitted(let admitted):
+      ticket = admitted
+    case .busy:
+      finish()
+      return
+    case .clockBehind(let isFirst):
+      finish()
+      if isFirst {
+        reportError(RuntimeError.error(withMessage: MLKitClockGuard.clockBehindMessage))
+      }
+      return
+    }
+
     recognizer.process(image) { [weak self] text, error in
+      // Before anything else: the pipeline is shared by every output.
+      MLKitClockGuard.shared.release(ticket)
       guard let self else { return }
       defer { self.finish() }
       if let error {
